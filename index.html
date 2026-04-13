@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mini Trip Planner</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background: linear-gradient(135deg, #667eea, #764ba2);">
+
+  <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 300px; text-align: center;">
+    
+    <h2 style="margin-bottom: 20px; color: #333;">Mini Trip Planner</h2>
+
+    <form id="tripForm">
+      
+      <input type="text" id="destination" placeholder="Destination" required 
+        style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px;" /><br>
+
+      <input type="date" id="date" required 
+        style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px;" /><br>
+
+      <!-- NEW: Days -->
+      <input type="number" id="days" placeholder="Number of Days" required 
+        style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px;" /><br>
+
+      <!-- NEW: Budget -->
+      <input type="number" id="budget" placeholder="Budget (₹)" required 
+        style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px;" /><br>
+
+      <button type="submit" 
+        style="width: 100%; padding: 10px; border: none; border-radius: 8px; background: #667eea; color: white; font-size: 16px; cursor: pointer;">
+        Plan Trip
+      </button>
+
+    </form>
+
+  </div>
+
+  <script>
+    const form = document.getElementById("tripForm");
+
+    form.addEventListener("submit", async (e) => { 
+      e.preventDefault();
+
+      const destination = document.getElementById("destination").value;
+      const date = document.getElementById("date").value;
+      const days = document.getElementById("days").value;
+      const budget = document.getElementById("budget").value;
+
+      try {
+        const response = await fetch("https://flwn33bwh0.execute-api.ap-south-1.amazonaws.com/prod/planTrip", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: "user123",
+            destination: destination,
+            date: date,
+            days: days,
+            budget: budget
+          })
+        });
+
+        const data = await response.json();
+
+        alert(data.message);
+        form.reset();
+
+      } catch (error) {
+        alert("Error: " + error.message);
+      }
+    });
+  </script>
+</body>
+</html>
